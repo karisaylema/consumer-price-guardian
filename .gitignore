@@ -22,6 +22,9 @@ infra/.terraform.lock.hcl
 infra/*.tfvars
 !infra/*.tfvars.example
 
+# Lambda build artifacts
+infra/build/
+
 # Data
 data/raw/
 data/processed/

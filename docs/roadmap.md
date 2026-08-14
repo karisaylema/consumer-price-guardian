@@ -4,35 +4,35 @@ Tracking what's built vs. planned. Kept honest on purpose — this is a live por
 
 ## Phase 1: Foundation
 - [x] Repo structure and documentation
-- [ ] Terraform base (S3 buckets, IAM roles, networking)
-- [ ] CI pipeline skeleton (lint, test, terraform plan on PR)
+- [x] Terraform base (S3 buckets, IAM roles, networking)
+- [x] CI pipeline skeleton (lint, test, terraform plan on PR)
 
 ## Phase 2: Structured data pipeline
-- [ ] Glue ETL job for INEC IPC (Índice de Precios al Consumidor) monthly CSV/XLSX releases
-- [ ] Glue ETL job for INEC Canasta Familiar Básica / Vital, by city
-- [ ] Glue Data Catalog schema definitions
-- [ ] Athena queries validated against sample data
-- [ ] Unit tests for transformation logic
-- [ ] Handle INEC's format inconsistencies across months (some releases are
-      .xls, others .xlsx; column naming has shifted historically — normalize
-      in the ETL layer, don't assume a stable schema)
+- [x] Glue ETL job for INEC IPC (Índice de Precios al Consumidor) monthly CSV/XLSX releases
+- [x] Glue ETL job for INEC Canasta Familiar Básica / Vital, by city
+- [x] Glue Data Catalog schema definitions
+- [x] Athena query layer (read-only guard + execution wrapper) validated in unit tests
+- [x] Unit tests for transformation logic
+- [x] Handle INEC's format inconsistencies across months (some releases are
+      .xls, others .xlsx; column naming has shifted historically — normalized
+      defensively via alias maps in `src/ingestion/normalize.py`)
 
 ## Phase 3: RAG pipeline
-- [ ] Ley Orgánica de Defensa del Consumidor text ingestion (chunk by
-      article, since that's the natural citation unit — "Art. 39" needs to
-      map to a single retrievable chunk)
-- [ ] Lambda: embedding generation via Bedrock
-- [ ] OpenSearch Serverless collection + index setup
-- [ ] Lambda: retrieval endpoint
+- [x] Ley Orgánica de Defensa del Consumidor text ingestion (chunk by
+      article, since that's the natural citation unit — "Art. 39" maps to a
+      single retrievable chunk); see `src/rag/chunker.py`
+- [x] Lambda: embedding generation via Bedrock (`src/rag/embeddings.py`)
+- [x] OpenSearch Serverless collection + index setup (infra + `src/rag/opensearch.py`)
+- [x] Lambda: retrieval endpoint (`src/rag/retriever.py`)
 - [ ] Retrieval quality evaluation (sample Q&A set built from known articles,
       e.g. Art. 39 excessive billing, Art. 66 technical/quality standards)
 
 ## Phase 4: Agent
-- [ ] LangGraph agent definition
-- [ ] SQL tool (Athena wrapper)
-- [ ] Retrieval tool (OpenSearch wrapper)
-- [ ] Tool routing logic and system prompt
-- [ ] Integration tests: end-to-end query -> answer
+- [x] LangGraph agent definition (`src/agent/graph.py`)
+- [x] SQL tool (Athena wrapper) with read-only guard
+- [x] Retrieval tool (OpenSearch wrapper)
+- [x] Tool routing logic and system prompt (incl. the "cite, don't advise" constraint)
+- [ ] Integration tests: end-to-end query -> answer (requires deployed sandbox)
 
 ## Phase 5: Polish
 - [ ] Architecture diagram (proper rendered version)
