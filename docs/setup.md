@@ -37,13 +37,20 @@ terraform apply
 
 This provisions: S3 buckets for raw/processed data, the Glue Data Catalog and jobs, an OpenSearch Serverless collection, and the Lambda functions for RAG indexing/retrieval. See `infra/README.md` for module-level details.
 
-## 4. Load sample data
+## 4. Load sample data _(Phase 2 — work in progress)_
 
 ```bash
 python scripts/load_sample_data.py
 ```
 
-Downloads a small sample of INEC IPC / Canasta data for local testing without needing to hit ecuadorencifras.gob.ec directly.
+Intended to upload a small sample of INEC IPC / Canasta data to the raw bucket
+for local testing without hitting ecuadorencifras.gob.ec directly. This helper
+is currently a stub (see [docs/roadmap.md](roadmap.md) Phase 2) — until it lands,
+upload sample files to the raw bucket manually, e.g.:
+
+```bash
+aws s3 cp ./data/raw/ "s3://$RAW_DATA_BUCKET/" --recursive
+```
 
 ## 5. Run the agent locally
 

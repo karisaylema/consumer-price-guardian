@@ -9,6 +9,12 @@
 
 locals {
   prefix = "${var.project_name}-${var.environment}"
+
+  # Both RAG Lambdas only ever call the Titan embeddings model (the indexer to
+  # embed law text, the retriever to embed the query). Claude is invoked by the
+  # agent process, not these functions — so the Lambda roles are scoped to the
+  # embeddings model only rather than bedrock:InvokeModel on "*".
+  embeddings_model_arn = "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2:0"
 }
 
 data "aws_iam_policy_document" "lambda_assume" {
@@ -36,7 +42,7 @@ data "aws_iam_policy_document" "indexer" {
   statement {
     sid       = "InvokeBedrockEmbeddings"
     actions   = ["bedrock:InvokeModel"]
-    resources = ["*"]
+    resources = [local.embeddings_model_arn]
   }
   statement {
     sid       = "OpenSearchDataPlane"
@@ -66,7 +72,7 @@ data "aws_iam_policy_document" "retriever" {
   statement {
     sid       = "InvokeBedrockEmbeddings"
     actions   = ["bedrock:InvokeModel"]
-    resources = ["*"]
+    resources = [local.embeddings_model_arn]
   }
   statement {
     sid       = "OpenSearchDataPlane"

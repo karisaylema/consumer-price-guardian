@@ -41,7 +41,3 @@ variable "package_path" {
   type        = string
   default     = "../build/rag_lambda.zip"
 }
-
-variable "aws_region" {
-  type = string
-}

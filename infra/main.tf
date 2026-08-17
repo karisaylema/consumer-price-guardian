@@ -44,7 +44,6 @@ module "lambda_rag" {
 
   project_name        = var.project_name
   environment         = var.environment
-  aws_region          = var.aws_region
   indexer_role_arn    = module.iam.indexer_role_arn
   retriever_role_arn  = module.iam.retriever_role_arn
   raw_bucket_id       = module.data_lake.raw_bucket_id

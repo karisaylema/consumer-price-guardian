@@ -20,7 +20,11 @@ from src.shared.config import config
 
 def main() -> None:
     config.require("raw_data_bucket")
-    raise NotImplementedError("See docs/roadmap.md Phase 2")
+    raise SystemExit(
+        "load_sample_data is a Phase 2 stub — not yet implemented.\n"
+        "See docs/roadmap.md (Phase 2) for the planned flow. Until then, upload "
+        "sample INEC files to the raw bucket manually with the AWS CLI."
+    )
 
 
 if __name__ == "__main__":

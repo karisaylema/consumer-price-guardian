@@ -22,4 +22,15 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+
+  # Tag every resource for cost attribution and ownership. Given OpenSearch
+  # Serverless and Bedrock bill by usage, tag-based cost tracking is the natural
+  # companion to the cost warnings in the READMEs.
+  default_tags {
+    tags = {
+      Project     = var.project_name
+      Environment = var.environment
+      ManagedBy   = "terraform"
+    }
+  }
 }

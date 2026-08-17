@@ -4,10 +4,12 @@
 
 locals {
   prefix = "${var.project_name}-${var.environment}"
+  # NOTE: do not set AWS_REGION here — it is a reserved Lambda runtime variable
+  # that the service injects automatically. Setting it makes `terraform apply`
+  # fail with a "reserved keys" error, and boto3 already reads the injected value.
   env = {
     OPENSEARCH_COLLECTION_ENDPOINT = var.opensearch_endpoint
     OPENSEARCH_INDEX_NAME          = var.opensearch_index_name
-    AWS_REGION                     = var.aws_region
   }
 }
 

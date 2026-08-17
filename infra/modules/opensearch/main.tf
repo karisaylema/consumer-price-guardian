@@ -20,18 +20,22 @@ resource "aws_opensearchserverless_security_policy" "encryption" {
   })
 }
 
-# Public network access keeps the sandbox simple; tighten to a VPC endpoint for
+# Network access. Public keeps the sandbox simple (still SigV4-authenticated);
+# flip var.allow_public_network_access to false and attach a VPC endpoint for
 # anything beyond a solo dev environment.
 resource "aws_opensearchserverless_security_policy" "network" {
   name = "${local.collection_name}-net"
   type = "network"
   policy = jsonencode([{
-    Description = "Public access for ${local.collection_name}"
+    Description = "Access policy for ${local.collection_name}"
     Rules = [
       { ResourceType = "collection", Resource = ["collection/${local.collection_name}"] },
       { ResourceType = "dashboard", Resource = ["collection/${local.collection_name}"] },
     ]
-    AllowFromPublic = true
+    AllowFromPublic = var.allow_public_network_access
+    # When AllowFromPublic is false, list the VPC endpoint(s) allowed to reach
+    # the collection here, e.g.:
+    # SourceVPCEs = [aws_opensearchserverless_vpc_endpoint.this.id]
   }])
 }
 

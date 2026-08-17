@@ -1,5 +1,8 @@
 # Consumer Price Guardian
 
+[![CI](https://github.com/karisaylema/consumer-price-guardian/actions/workflows/ci.yml/badge.svg)](https://github.com/karisaylema/consumer-price-guardian/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A multi-tool LLM agent that helps consumers and analysts understand price trends in Ecuador and know their rights when prices move — by combining official INEC price statistics with the text of Ecuador's consumer protection law.
 
 Built with LangGraph, AWS Bedrock, and a dual-pipeline data architecture on AWS.
@@ -37,8 +40,9 @@ Two independent pipelines feed a LangGraph agent that decides which tool(s) to c
     └─────────┬──────────┘              └──────────┬──────────┘
               │                                     │
     ┌─────────▼──────────┐              ┌──────────▼──────────┐
-    │  Glue ETL Jobs           │              │  Lambda (embed +          │
-    │  (INEC IPC, Canasta)     │              │  index legal text)        │
+    │  Python ETL              │              │  Lambda (embed +          │
+    │  (INEC IPC, Canasta →    │              │  index legal text)        │
+    │   Parquet in Glue table) │              │                          │
     └─────────┬──────────┘              └──────────┬──────────┘
               │                                     │
     ┌─────────▼──────────┐              ┌──────────▼──────────┐
@@ -55,7 +59,8 @@ Two independent pipelines feed a LangGraph agent that decides which tool(s) to c
 |---|---|
 | Agent orchestration | LangGraph |
 | LLM | Claude via AWS Bedrock |
-| Structured ETL | AWS Glue |
+| Structured ETL | Python (Pandas + PyArrow) → Parquet |
+| Data catalog | AWS Glue Data Catalog |
 | Structured query engine | Amazon Athena |
 | Vector store | OpenSearch Serverless |
 | RAG indexing | AWS Lambda |
@@ -68,7 +73,7 @@ Two independent pipelines feed a LangGraph agent that decides which tool(s) to c
 ```
 .
 ├── src/
-│   ├── ingestion/    # Glue ETL jobs for INEC IPC and Canasta Familiar data
+│   ├── ingestion/    # Python ETL for INEC IPC and Canasta Familiar data
 │   ├── rag/          # Lambda functions: embedding + indexing + retrieval
 │   ├── agent/         # LangGraph agent definition and tool wiring
 │   └── shared/        # Shared utilities (config, AWS clients, schemas)
