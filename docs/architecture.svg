@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="700" viewBox="0 0 920 700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" role="img" aria-label="Consumer Price Guardian architecture: a LangGraph agent routing to a structured SQL pipeline (Athena, Glue, S3) and a RAG pipeline (OpenSearch, Lambda, S3).">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/>
+    </marker>
+    <style>
+      .card { rx: 10; ry: 10; stroke-width: 1.5; }
+      .title { font-size: 15px; font-weight: 700; }
+      .sub { font-size: 12px; }
+      .lbl { font-size: 11px; fill: #57606a; font-weight: 600; letter-spacing: .04em; }
+      .flow { stroke: #8b949e; stroke-width: 1.6; fill: none; }
+    </style>
+  </defs>
+
+  <!-- background card: neutral so it reads on light and dark GitHub themes -->
+  <rect x="0" y="0" width="920" height="700" rx="14" fill="#ffffff" stroke="#d0d7de"/>
+
+  <!-- ===== Agent ===== -->
+  <rect x="330" y="30" width="260" height="66" rx="10" fill="#fff1e5" stroke="#e08a2e" stroke-width="1.6"/>
+  <text x="460" y="58" text-anchor="middle" class="title" fill="#7a4a12">LangGraph Agent</text>
+  <text x="460" y="78" text-anchor="middle" class="sub" fill="#8a5a22">Claude via AWS Bedrock · routes each query</text>
+
+  <!-- split lines from agent to the two tools -->
+  <path class="flow" d="M460,96 L460,120 L215,120 L215,150" marker-end="url(#arrow)"/>
+  <path class="flow" d="M460,96 L460,120 L705,120 L705,150" marker-end="url(#arrow)"/>
+
+  <!-- ===== Column headers ===== -->
+  <text x="215" y="142" text-anchor="middle" class="lbl" fill="#0969da">STRUCTURED PIPELINE</text>
+  <text x="705" y="142" text-anchor="middle" class="lbl" fill="#8250df">RAG PIPELINE</text>
+
+  <!-- ============ LEFT: structured (blue) ============ -->
+  <!-- SQL Tool -->
+  <rect x="90" y="150" width="250" height="60" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.6"/>
+  <text x="215" y="176" text-anchor="middle" class="title" fill="#0a4a8a">SQL Tool</text>
+  <text x="215" y="195" text-anchor="middle" class="sub" fill="#0a4a8a">read-only guard · structured data</text>
+
+  <path class="flow" d="M215,210 L215,250" marker-end="url(#arrow)"/>
+
+  <!-- Athena -->
+  <rect x="90" y="250" width="250" height="60" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.6"/>
+  <text x="215" y="276" text-anchor="middle" class="title" fill="#0a4a8a">Amazon Athena</text>
+  <text x="215" y="295" text-anchor="middle" class="sub" fill="#0a4a8a">queries the Glue Data Catalog</text>
+
+  <path class="flow" d="M215,310 L215,350" marker-end="url(#arrow)"/>
+
+  <!-- Glue / ETL -->
+  <rect x="90" y="350" width="250" height="66" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="1.6"/>
+  <text x="215" y="376" text-anchor="middle" class="title" fill="#0a4a8a">Python ETL → Glue tables</text>
+  <text x="215" y="395" text-anchor="middle" class="sub" fill="#0a4a8a">IPC + Canasta → Parquet</text>
+
+  <path class="flow" d="M215,416 L215,456" marker-end="url(#arrow)"/>
+
+  <!-- S3 raw -->
+  <rect x="90" y="456" width="250" height="56" rx="10" fill="#eef4fb" stroke="#0969da" stroke-width="1.4"/>
+  <text x="215" y="480" text-anchor="middle" class="title" fill="#0a4a8a">S3 — raw INEC data</text>
+  <text x="215" y="498" text-anchor="middle" class="sub" fill="#0a4a8a">monthly CSV / XLSX releases</text>
+
+  <!-- ============ RIGHT: RAG (purple) ============ -->
+  <!-- Retrieval Tool -->
+  <rect x="580" y="150" width="250" height="60" rx="10" fill="#fbefff" stroke="#8250df" stroke-width="1.6"/>
+  <text x="705" y="176" text-anchor="middle" class="title" fill="#5a2ca0">Retrieval Tool</text>
+  <text x="705" y="195" text-anchor="middle" class="sub" fill="#5a2ca0">semantic search · legal text</text>
+
+  <path class="flow" d="M705,210 L705,250" marker-end="url(#arrow)"/>
+
+  <!-- OpenSearch -->
+  <rect x="580" y="250" width="250" height="60" rx="10" fill="#fbefff" stroke="#8250df" stroke-width="1.6"/>
+  <text x="705" y="276" text-anchor="middle" class="title" fill="#5a2ca0">OpenSearch Serverless</text>
+  <text x="705" y="295" text-anchor="middle" class="sub" fill="#5a2ca0">k-NN vector search</text>
+
+  <path class="flow" d="M705,310 L705,350" marker-end="url(#arrow)"/>
+
+  <!-- Lambda -->
+  <rect x="580" y="350" width="250" height="66" rx="10" fill="#fbefff" stroke="#8250df" stroke-width="1.6"/>
+  <text x="705" y="376" text-anchor="middle" class="title" fill="#5a2ca0">Lambda — embed + index</text>
+  <text x="705" y="395" text-anchor="middle" class="sub" fill="#5a2ca0">Titan embeddings, chunk by article</text>
+
+  <path class="flow" d="M705,416 L705,456" marker-end="url(#arrow)"/>
+
+  <!-- S3 legal -->
+  <rect x="580" y="456" width="250" height="56" rx="10" fill="#f6eefb" stroke="#8250df" stroke-width="1.4"/>
+  <text x="705" y="480" text-anchor="middle" class="title" fill="#5a2ca0">S3 — legal text</text>
+  <text x="705" y="498" text-anchor="middle" class="sub" fill="#5a2ca0">Ley de Defensa del Consumidor</text>
+
+  <!-- ===== Data sources footer ===== -->
+  <rect x="90" y="560" width="740" height="72" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.4"/>
+  <text x="460" y="586" text-anchor="middle" class="lbl" fill="#57606a">DATA SOURCES · INEC (Ecuador)</text>
+  <text x="460" y="608" text-anchor="middle" class="sub" fill="#24292f">Índice de Precios al Consumidor (IPC) · Canasta Familiar Básica / Vital</text>
+  <text x="460" y="626" text-anchor="middle" class="sub" fill="#24292f">Ley Orgánica de Defensa del Consumidor (Ley No. 2000-21)</text>
+
+  <path class="flow" d="M215,512 L215,536 L360,536" marker-end="url(#arrow)"/>
+  <path class="flow" d="M705,512 L705,536 L560,536" marker-end="url(#arrow)"/>
+
+  <!-- IaC note -->
+  <text x="460" y="668" text-anchor="middle" class="sub" fill="#57606a">All AWS resources provisioned with Terraform · CI/CD via GitHub Actions</text>
+</svg>

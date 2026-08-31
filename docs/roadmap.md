@@ -35,7 +35,7 @@ Tracking what's built vs. planned. Kept honest on purpose — this is a live por
 - [ ] Integration tests: end-to-end query -> answer (requires deployed sandbox)
 
 ## Phase 5: Polish
-- [ ] Architecture diagram (proper rendered version)
+- [x] Architecture diagram (proper rendered version) — `docs/architecture.svg`, embedded in the README
 - [ ] Example queries and outputs in README
 - [ ] Cost notes (Bedrock + OpenSearch Serverless can add up — document expected spend)
 - [ ] Demo video or screenshots

@@ -20,36 +20,9 @@ Answering a question like *"The cost of the basic basket in Guayaquil went up th
 
 Two independent pipelines feed a LangGraph agent that decides which tool(s) to call per query.
 
-```
-                    ┌─────────────────────────┐
-                    │   LangGraph Agent        │
-                    │   (Claude via Bedrock)   │
-                    └───────────┬──────────────┘
-                                │
-              ┌─────────────────┴─────────────────┐
-              │                                     │
-    ┌─────────▼──────────┐              ┌──────────▼──────────┐
-    │  SQL Tool             │              │  Retrieval Tool         │
-    │  (structured data)    │              │  (legal text)            │
-    └─────────┬──────────┘              └──────────┬──────────┘
-              │                                     │
-    ┌─────────▼──────────┐              ┌──────────▼──────────┐
-    │  Athena                │              │  OpenSearch              │
-    │  (queries Glue          │              │  Serverless               │
-    │   Data Catalog)        │              │  (vector search)         │
-    └─────────┬──────────┘              └──────────┬──────────┘
-              │                                     │
-    ┌─────────▼──────────┐              ┌──────────▼──────────┐
-    │  Python ETL              │              │  Lambda (embed +          │
-    │  (INEC IPC, Canasta →    │              │  index legal text)        │
-    │   Parquet in Glue table) │              │                          │
-    └─────────┬──────────┘              └──────────┬──────────┘
-              │                                     │
-    ┌─────────▼──────────┐              ┌──────────▼──────────┐
-    │  S3 (raw data)           │              │  S3 (Ley Orgánica de        │
-    │                          │              │  Defensa del Consumidor)   │
-    └───────────────────┘              └───────────────────┘
-```
+<p align="center">
+  <img src="docs/architecture.svg" alt="Consumer Price Guardian architecture: a LangGraph agent routing each query to a structured SQL pipeline (Athena, Glue, S3) and a RAG pipeline (OpenSearch, Lambda, S3), both fed by INEC data and the consumer-protection law." width="820">
+</p>
 
 **Why two pipelines instead of one?** The structured pipeline (Glue + Athena) is optimized for trend analysis over monthly time-series data by city and product category — the kind of query SQL is built for. The RAG pipeline (Lambda + OpenSearch) is optimized for semantic similarity over legal prose, where the answer isn't a row but a specific article. Forcing both through the same engine would mean compromising one or the other.
 
