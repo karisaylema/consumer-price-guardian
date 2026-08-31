@@ -24,8 +24,11 @@ load_dotenv()
 @dataclass(frozen=True)
 class Config:
     aws_region: str = os.getenv("AWS_REGION", "us-east-1")
+    # Overridable via BEDROCK_MODEL_ID. Some regions require the cross-region
+    # inference-profile form (e.g. "us.anthropic.claude-opus-5") rather than the
+    # bare on-demand id below.
     bedrock_model_id: str = os.getenv(
-        "BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20241022-v2:0"
+        "BEDROCK_MODEL_ID", "anthropic.claude-opus-5"
     )
 
     # Filled in after `terraform apply` (see infra/outputs.tf)
