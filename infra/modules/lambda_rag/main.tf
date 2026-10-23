@@ -22,6 +22,10 @@ resource "aws_lambda_function" "indexer" {
   timeout       = 300
   memory_size   = 512
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = local.env
   }
@@ -35,6 +39,10 @@ resource "aws_lambda_function" "retriever" {
   filename      = var.package_path
   timeout       = 30
   memory_size   = 512
+
+  tracing_config {
+    mode = "Active"
+  }
 
   environment {
     variables = local.env
