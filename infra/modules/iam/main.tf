@@ -33,6 +33,7 @@ resource "aws_iam_role" "indexer" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
 }
 
+# tfsec:ignore:aws-iam-no-policy-wildcards Deliberate, least privilege achievable here: S3 access is limited to the consumer-law-text/ prefix; Bedrock to one embeddings model (the "*" is only the region, for cross-region inference); aoss:APIAccessAll cannot be narrowed without a cycle with the collection and is gated by the OpenSearch data-access policy.
 data "aws_iam_policy_document" "indexer" {
   statement {
     sid       = "ReadRawLawText"
@@ -57,6 +58,11 @@ resource "aws_iam_role_policy" "indexer" {
   policy = data.aws_iam_policy_document.indexer.json
 }
 
+resource "aws_iam_role_policy_attachment" "indexer_xray" {
+  role       = aws_iam_role.indexer.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "indexer_logs" {
   role       = aws_iam_role.indexer.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -68,6 +74,7 @@ resource "aws_iam_role" "retriever" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
 }
 
+# tfsec:ignore:aws-iam-no-policy-wildcards Deliberate, least privilege achievable here: S3 access is limited to the consumer-law-text/ prefix; Bedrock to one embeddings model (the "*" is only the region, for cross-region inference); aoss:APIAccessAll cannot be narrowed without a cycle with the collection and is gated by the OpenSearch data-access policy.
 data "aws_iam_policy_document" "retriever" {
   statement {
     sid       = "InvokeBedrockEmbeddings"
@@ -85,6 +92,11 @@ resource "aws_iam_role_policy" "retriever" {
   name   = "retriever"
   role   = aws_iam_role.retriever.id
   policy = data.aws_iam_policy_document.retriever.json
+}
+
+resource "aws_iam_role_policy_attachment" "retriever_xray" {
+  role       = aws_iam_role.retriever.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "retriever_logs" {

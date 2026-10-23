@@ -13,10 +13,12 @@ locals {
   processed_name  = "${var.project_name}-processed-${local.suffix}"
 }
 
+# tfsec:ignore:aws-s3-enable-bucket-logging Access logging needs a separate log bucket; skipped for this project-scale lake (S3 data events can be captured via CloudTrail if required).
 resource "aws_s3_bucket" "raw" {
   bucket = local.raw_bucket_name
 }
 
+# tfsec:ignore:aws-s3-enable-bucket-logging Access logging needs a separate log bucket; skipped for this project-scale lake (S3 data events can be captured via CloudTrail if required).
 resource "aws_s3_bucket" "processed" {
   bucket = local.processed_name
 }
@@ -38,6 +40,7 @@ resource "aws_s3_bucket_versioning" "processed" {
 # SSE-S3 (AES256) on both buckets — a data lake should never store objects
 # unencrypted at rest. Swap to aws:kms with a CMK if key-level audit/rotation
 # is required.
+# tfsec:ignore:aws-s3-encryption-customer-key SSE-S3 is a deliberate choice: a CMK adds a monthly key cost and no key-level audit requirement exists.
 resource "aws_s3_bucket_server_side_encryption_configuration" "raw" {
   bucket = aws_s3_bucket.raw.id
   rule {
@@ -47,6 +50,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "raw" {
   }
 }
 
+# tfsec:ignore:aws-s3-encryption-customer-key SSE-S3 is a deliberate choice: a CMK adds a monthly key cost and no key-level audit requirement exists.
 resource "aws_s3_bucket_server_side_encryption_configuration" "processed" {
   bucket = aws_s3_bucket.processed.id
   rule {
